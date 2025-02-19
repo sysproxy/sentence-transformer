@@ -1,17 +1,14 @@
-import os
 import pickle
 
 import requests
 from flask import Flask, request, jsonify
-from dotenv import load_dotenv
-
-load_dotenv()
 
 
 def create_app() -> Flask:
     app = Flask(__name__)
-    app.config['PORT'] = int(os.getenv('PORT', 7020))
-    app.config['MODEL_URL'] = os.getenv('MODEL_URL')
+
+    import config
+    app.config.from_object(config)
 
     response = requests.get(app.config['MODEL_URL'])
 
@@ -56,6 +53,7 @@ def create_app() -> Flask:
     return app
 
 
+app = create_app()
+
 if __name__ == '__main__':
-    app = create_app()
-    app.run(host='0.0.0.0', port=app.config['PORT'])
+    app.run(host='0.0.0.0', port=7020)
